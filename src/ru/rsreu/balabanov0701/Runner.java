@@ -1,4 +1,11 @@
-package ru.rsreu.balabanov0701;
+package ru.rsreu.balabanov0716;
+
+import ru.rsreu.balabanov0716.components.Initializer;
+import ru.rsreu.balabanov0716.components.helpers.FurnitureComparator;
+import ru.rsreu.balabanov0716.domain.Furniture;
+import ru.rsreu.balabanov0716.domain.enums.FurnitureType;
+import ru.rsreu.balabanov0716.services.FurnitureService;
+import ru.rsreu.balabanov0716.services.SystemConsoleService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,28 +13,19 @@ import java.util.List;
 
 public class Runner {
     public static void main(String[] args) {
-        try {
-            TableView view = new TableView(new StringBuilder());
-            ListControl listControl = new ListControl();
-            List<Guideline> guidelines = new ArrayList<Guideline>();
+        SystemConsoleService view = new SystemConsoleService();
+        FurnitureService listControl = new FurnitureService();
+        List<Furniture> furnitureList = Initializer.getHardcodedData();
 
-            guidelines.add(new Guideline(1, "Davis", "Geometry"));
-            guidelines.add(new  Guideline(2, "Williams", "Maths"));
-            guidelines.add(new Guideline(3, "Miller", "Informatics"));
-            guidelines.add(new Guideline(4, "Miller", "Maths"));
+        Collections.sort(furnitureList);
+        view.addRow("Default sort:", furnitureList);
+        furnitureList.sort(new FurnitureComparator());
+        view.addRow("Sort by 2 fields:", furnitureList);
+        view.addRow("Show only unique value:", new ArrayList<>(listControl.findUniqueValue(furnitureList)));
+        listControl.deleteItems(furnitureList, FurnitureType.BAD);
+        view.addRow("Delete items:", furnitureList);
+        listControl.findById(furnitureList, 2);
 
-            Collections.sort(guidelines);
-            view.addRow("Default sort:", guidelines);
-            guidelines.sort(new GuidelineComparator());
-            view.addRow("Sort by 2 fields:", guidelines);
-            view.addRow("Show only unique value:", listControl.findUniqueValue(guidelines));
-            view.addRow("Delete items:", listControl.findUniqueValue(guidelines));
-            listControl.deleteItems(guidelines, "Maths");
-            view.addRow("Find element by id:", listControl.findById(guidelines, 2));
-
-            view.renderResult();
-        } catch (Exception e) {
-            System.out.print(e.getMessage());
-        }
+        view.renderResult();
     }
 }
