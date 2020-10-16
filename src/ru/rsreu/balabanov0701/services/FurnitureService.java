@@ -11,12 +11,6 @@ import java.util.stream.Collectors;
 
 public class FurnitureService {
 
-    private final static String NOT_FOUND = "Not found";
-
-    private Map<Integer, Furniture> convertToMap(List<Furniture> list) {
-        return list.stream().collect(Collectors.toMap(Furniture::getId, item -> item));
-    }
-
     public Set<String> findUniqueValue(List<Furniture> list) {
         return list.stream()
                 .map(Furniture::getTitle)
@@ -36,5 +30,11 @@ public class FurnitureService {
     public String findById(List<Furniture> list, int id) {
         Map<Integer, Furniture> map = convertToMap(list);
         return map.containsKey(id) ? map.get(id).toString() : NOT_FOUND;
+    }
+
+    private final static String NOT_FOUND = "Not found";
+
+    private Map<Integer, Furniture> convertToMap(List<Furniture> list) {
+        return list.stream().collect(Collectors.toMap(Furniture::getId, item -> item));
     }
 }
